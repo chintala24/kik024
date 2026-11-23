@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="lo" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ທ່ຽວຈຳປາສັກ - ມົນສະເໜ່ແຫ່ງພາກໃຕ້ຂອງລາວ</title>
+    
+    <!-- ນຳເຂົ້າ Google Fonts: Noto Sans Lao -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- ນຳເຂົ້າ Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ນຳເຂົ້າ Font Awesome ສຳລັບໄອຄອນ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ຕັ້ງຄ່າ Tailwind ໃຫ້ໃຊ້ຟອນ Noto Sans Lao ແລະ ສີຫຼັກ -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Lao"', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            850: '#064e3b',
+                            950: '#022c22',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ປັບແຕ່ງ Scrollbar ໃຫ້ສວຍງາມ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #059669;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #047857;
+        }
+        
+        /* ພາບພື້ນຫຼັງ Hero ພ້ອມ Gradient ທັບຊ້ອນ */
+        .hero-bg {
+            background-image: linear-gradient(to bottom, rgba(2, 44, 34, 0.65), rgba(6, 78, 59, 0.85)), 
+                              url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=2039&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        @media (max-width: 768px) {
+            .hero-bg {
+                background-attachment: scroll;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-600 selection:text-white">
+
+    <!-- ແຖບເມນູດ້ານເທິງ (Navbar) -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-300 bg-emerald-950/90 backdrop-blur-md text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- ໂລໂກ້ -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-emerald-950 font-bold text-xl shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-gopuram"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-xl tracking-wide block leading-none">ທ່ຽວຈຳປາສັກ</span>
+                        <span class="text-xs text-amber-300 font-light">Champasak Travel</span>
+                    </div>
+                </a>
+
+                <!-- ເມນູສຳລັບໜ້າຈໍໃຫຍ່ -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="hover:text-amber-400 transition-colors font-medium">ໜ້າຫຼັກ</a>
+                    <a href="#destinations" class="hover:text-amber-400 transition-colors font-medium">ສະຖານທີ່ທ່ອງທ່ຽວ</a>
+                    <a href="#itinerary" class="hover:text-amber-400 transition-colors font-medium">ແຜນການເດີນທາງ</a>
+                    <a href="#tips" class="hover:text-amber-400 transition-colors font-medium">ຄຳແນະນຳ</a>
+                </div>
+
+                <!-- ປຸ່ມເມນູສຳລັບມືຖື -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="p-2 rounded-lg text-white hover:bg-emerald-800 focus:outline-none" aria-label="ເປີດເມນູ">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ເມນູເລື່ອນລົງສຳລັບມືຖື -->
+        <div id="mobile-menu" class="hidden md:hidden bg-emerald-900 border-t border-emerald-800 px-4 pt-2 pb-6 space-y-2 shadow-xl">
+            <a href="#home" class="block px-4 py-3 rounded-lg hover:bg-emerald-800 font-medium">ໜ້າຫຼັກ</a>
+            <a href="#destinations" class="block px-4 py-3 rounded-lg hover:bg-emerald-800 font-medium">ສະຖານທີ່ທ່ອງທ່ຽວ</a>
+            <a href="#itinerary" class="block px-4 py-3 rounded-lg hover:bg-emerald-800 font-medium">ແຜນການເດີນທາງ</a>
+            <a href="#tips" class="block px-4 py-3 rounded-lg hover:bg-emerald-800 font-medium">ຄຳແນະນຳ</a>
+        </div>
+    </nav>
+
+    <!-- 1. ສ່ວນຫົວ (Hero Section) -->
+    <header id="home" class="hero-bg relative min-h-[85vh] flex items-center justify-center text-center text-white pt-20 px-4">
+        <div class="max-w-4xl mx-auto space-y-6 animate-fade-in">
+            <div class="inline-flex items-center space-x-2 bg-white/15 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-amber-300 text-sm font-medium">
+                <i class="fa-solid fa-compass"></i>
+                <span>ດິນແດນແຫ່ງມໍລະດົກໂລກ ແລະ ທຳມະຊາດອັນຍິ່ງໃຫຍ່</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight drop-shadow-md">
+                ຍິນດີຕ້ອນຮັບສູ່ <span class="text-amber-400">ແຂວງຈຳປາສັກ</span>
+            </h1>
+            
+            <p class="text-lg sm:text-xl text-slate-100 max-w-2xl mx-auto font-light leading-relaxed">
+                ສຳຜັດມົນສະເໜ່ແຫ່ງພາກໃຕ້ຂອງລາວ ຕັ້ງແຕ່ຜາສາດຫີນວັດພູບູຮານ ນ້ຳຕົກຕາດຄອນພະເພັງອັນຍິ່ງໃຫຍ່ ໄປຈົນເຖິງສາຍລົມເຢັນສະບາຍເທິງພູພຽງບໍລະເວນ ແລະ ວິຖີຊີວິດທີ່ງຽບສະຫງົບແຫ່ງສີ່ພັນດອນ.
+            </p>
+            
+            <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#destinations" class="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-amber-400 text-emerald-950 font-bold rounded-xl shadow-lg hover:shadow-amber-500/30 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <span>ສຳຫຼວດສະຖານທີ່ທ່ອງທ່ຽວ</span>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
+                <a href="#itinerary" class="w-full sm:w-auto px-8 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <span>ເບິ່ງແຜນການເດີນທາງ</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ຄື້ນຕົກແຕ່ງດ້ານລຸ່ມ Hero -->
+        <div class="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
+            <svg class="relative block w-full h-12 sm:h-16 text-slate-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.22,193.39,104.24Z" fill="currentColor"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- 2 & 3. ສ່ວນຄົ້ນຫາ, ກັ່ນຕອງ ແລະ ສະແດງສະຖານທີ່ທ່ອງທ່ຽວ -->
+    <main id="destinations" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- ຫົວຂໍ້ສ່ວນ -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-emerald-600 font-semibold tracking-wider uppercase text-sm">ຈຸດໝາຍປາຍທາງຍອດນິຍົມ</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2 mb-4">ຄົ້ນພົບສະຖານທີ່ທ່ອງທ່ຽວໃນຈຳປາສັກ</h2>
+            <p class="text-slate-600">ເລືອກໝວດໝູ່ ຫຼື ຄົ້ນຫາຊື່ສະຖານທີ່ທ່ອງທ່ຽວທີ່ທ່ານສົນໃຈ ເພື່ອວາງແຜນການເດີນທາງຂອງທ່ານ</p>
+        </div>
+
+        <!-- ແຖບຄົ້ນຫາ ແລະ ປຸ່ມກັ່ນຕອງໝວດໝູ່ -->
+        <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-md border border-slate-100 mb-10">
+            <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+                <!-- ປຸ່ມກັ່ນຕອງໝວດໝູ່ -->
+                <div id="category-filters" class="flex flex-wrap items-center justify-center lg:justify-start gap-2 w-full lg:w-auto">
+                    <button data-category="all" class="filter-btn active px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-emerald-700 text-white shadow-sm">
+                        <i class="fa-solid fa-border-all mr-1.5"></i>ທັງໝົດ
+                    </button>
+                    <button data-category="culture" class="filter-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
+                        <i class="fa-solid fa-gopuram mr-1.5"></i>ວັດທະນະທຳ/ປະຫວັດສາດ
+                    </button>
+                    <button data-category="nature" class="filter-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
+                        <i class="fa-solid fa-water mr-1.5"></i>ທຳມະຊາດ/ນ້ຳຕົກຕາດ
+                    </button>
+                    <button data-category="islands" class="filter-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
+                        <i class="fa-solid fa-umbrella-beach mr-1.5"></i>ໝູ່ເກາະ
+                    </button>
+                </div>
+
+                <!-- ຊ່ອງຄົ້ນຫາ -->
+                <div class="relative w-full lg:w-80">
+                    <input type="text" id="search-input" placeholder="ຄົ້ນຫາສະຖານທີ່ (ເຊັ່ນ: ວັດພູ, ຕາດຟານ)..." 
+                           class="w-full pl-11 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent text-sm transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1" aria-label="ລຶບຄຳຄົ້ນຫາ">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ສະແດງຈຳນວນຜົນລັບ -->
+        <div class="mb-6 flex justify-between items-center text-sm text-slate-500">
+            <span id="results-count">ສະແດງທັງໝົດ 6 ສະຖານທີ່</span>
+        </div>
+
+        <!-- ຕາຕະລາງບັດສະແດງສະຖານທີ່ທ່ອງທ່ຽວ (Cards Grid) -->
+        <div id="places-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- ບັດຈະຖືກສ້າງຂຶ້ນໂດຍ JavaScript -->
+        </div>
+
+        <!-- ຂໍ້ຄວາມເມື່ອບໍ່ພົບຂໍ້ມູນ -->
+        <div id="no-results" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-100 shadow-sm">
+            <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">ບໍ່ພົບສະຖານທີ່ທ່ອງທ່ຽວທີ່ທ່ານຄົ້ນຫາ</h3>
+            <p class="text-slate-500 mb-6">ລອງປ່ຽນຄຳຄົ້ນຫາ ຫຼື ເລືອກໝວດໝູ່ອື່ນເບິ່ງເດີ້</p>
+            <button id="reset-filters-btn" class="px-6 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-medium rounded-xl transition-colors">
+                ສະແດງທັງໝົດຄືນໃໝ່
+            </button>
+        </div>
+    </main>
+
+    <!-- 5. ສ່ວນວາງແຜນການເດີນທາງ (Itinerary Planner) -->
+    <section id="itinerary" class="bg-emerald-950 text-white py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-amber-400 font-semibold tracking-wider uppercase text-sm">ແນະນຳເສັ້ນທາງທ່ອງທ່ຽວ</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-4">ຕົວຢ່າງແຜນການເດີນທາງໃນຈຳປາສັກ</h2>
+                <p class="text-emerald-200">ເລືອກຈຳນວນມື້ທີ່ທ່ານມີ ເພື່ອເບິ່ງແຜນການທ່ອງທ່ຽວທີ່ລົງຕົວ ແລະ ຄຸ້ມຄ່າທີ່ສຸດ</p>
+            </div>
+
+            <!-- ປຸ່ມເລືອກຈຳນວນມື້ -->
+            <div class="flex justify-center gap-3 mb-10">
+                <button onclick="switchItinerary('3days')" id="tab-3days" class="itinerary-tab px-6 py-3 rounded-xl font-bold text-sm sm:text-base transition-all bg-amber-500 text-emerald-950 shadow-lg">
+                    ແຜນ 3 ມື້ 2 ຄືນ (ຍອດນິຍົມ)
+                </button>
+                <button onclick="switchItinerary('4days')" id="tab-4days" class="itinerary-tab px-6 py-3 rounded-xl font-bold text-sm sm:text-base transition-all bg-emerald-900 text-emerald-100 hover:bg-emerald-800">
+                    ແຜນ 4 ມື້ 3 ຄືນ (ຈັດເຕັມ)
+                </button>
+            </div>
+
+            <!-- ເນື້ອຫາແຜນ 3 ມື້ 2 ຄືນ -->
+            <div id="content-3days" class="itinerary-content grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-emerald-900/70 border border-emerald-800 p-6 rounded-2xl backdrop-blur-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500 text-emerald-950 font-bold flex items-center justify-center">ມື້ 1</span>
+                        <h3 class="text-xl font-bold text-amber-300">ປາກເຊ - ພູພຽງບໍລະເວນ</h3>
+                    </div>
+                    <ul class="space-y-3 text-emerald-100 text-sm leading-relaxed">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ເຊົ້າ:</strong> ເດີນທາງຮອດເມືອງປາກເຊ ແວະຊິມເຂົ້າປຽກ ແລະ ກາເຟລາວແທ້ໆ.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ສວາຍ:</strong> ຂຶ້ນສູ່ພູພຽງບໍລະເວນ ຊົມຄວາມງາມຂອງ <strong>ນ້ຳຕົກຕາດຟານ</strong> ແລະ <strong>ຕາດເຍືອງ</strong>.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ແລງ:</strong> ຢ້ຽມຊົມສວນກາເຟ ແລະ ພັກຜ່ອນທ່າມກາງອາກາດໜາວເຢັນເທິງພູພຽງ.</span></li>
+                    </ul>
+                </div>
+
+                <div class="bg-emerald-900/70 border border-emerald-800 p-6 rounded-2xl backdrop-blur-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500 text-emerald-950 font-bold flex items-center justify-center">ມື້ 2</span>
+                        <h3 class="text-xl font-bold text-amber-300">ມໍລະດົກໂລກວັດພູ - ສີ່ພັນດອນ</h3>
+                    </div>
+                    <ul class="space-y-3 text-emerald-100 text-sm leading-relaxed">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ເຊົ້າ:</strong> ເດີນທາງໄປເມືອງຈຳປາສັກ ທ່ຽວຊົມ <strong>ຜາສາດຫີນວັດພູ</strong> ມໍລະດົກໂລກ.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ສວາຍ:</strong> ມຸ່ງໜ້າສູ່ເມືອງໂຂງ ຂີ່ເຮືອຂ້າມໄປ <strong>ດອນເດດ - ດອນຄອນ (ສີ່ພັນດອນ)</strong>.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ແລງ:</strong> ປັ່ນລົດຖີບຊົມຕາເວັນຕົກດິນແຄມແມ່ນ້ຳຂອງ ບັນຍາກາດສຸດໂຣແມນຕິກ.</span></li>
+                    </ul>
+                </div>
+
+                <div class="bg-emerald-900/70 border border-emerald-800 p-6 rounded-2xl backdrop-blur-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500 text-emerald-950 font-bold flex items-center justify-center">ມື້ 3</span>
+                        <h3 class="text-xl font-bold text-amber-300">ຄອນພະເພັງ - ເດີນທາງກັບ</h3>
+                    </div>
+                    <ul class="space-y-3 text-emerald-100 text-sm leading-relaxed">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ເຊົ້າ:</strong> ທ່ຽວຊົມນ້ຳຕົກຕາດຫຼີ່ຜີ ແລະ ຫົວລົດໄຟບູຮານເທິງດອນຄອນ.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ສວາຍ:</strong> ຂ້າມຝັ່ງໄປຊົມຄວາມຍິ່ງໃຫຍ່ຂອງ <strong>ນ້ຳຕົກຕາດຄອນພະເພັງ</strong> (ໄນແອງກາຣາແຫ່ງອາຊີ).</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-amber-400 mt-1"></i><span><strong>ແລງ:</strong> ກັບຄືນສູ່ປາກເຊ ຊື້ຂອງຕ້ອນຂອງຝາກ (ກາເຟ, ໝາກໄມ້) ແລະ ເດີນທາງກັບໂດຍສະຫວັດດີພາບ.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ເນື້ອຫາແຜນ 4 ມື້ 3 ຄືນ (ເຊື່ອງໄວ້ກ່ອນ) -->
+            <div id="content-4days" class="itinerary-content hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-emerald-900/70 border border-emerald-800 p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500 text-emerald-950 font-bold flex items-center justify-center">ມື້ 1</span>
+                        <h3 class="text-lg font-bold text-amber-300">ສຳຫຼວດເມືອງປາກເຊ</h3>
+                    </div>
+                    <p class="text-emerald-100 text-sm leading-relaxed">ຮອດປາກເຊ ໄຫວ້ພະທີ່ວັດພູສະເຫຼົ້າ ຊົມວິວເມືອງປາກເຊ ແລະ ຂົວມິດຕະພາບລາວ-ຍີ່ປຸ່ນ ຍາມແລງ.</p>
+                </div>
+                <div class="bg-emerald-900/70 border border-emerald-800 p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500 text-emerald-950 font-bold flex items-center justify-center">ມື້ 2</span>
+                        <h3 class="text-lg font-bold text-amber-300">ທ່ຽວນ້ຳຕົກພູພຽງບໍລະເວນ</h3>
+                    </div>
+                    <p class="text-emerald-100 text-sm leading-relaxed">ຕະລອນທ່ຽວນ້ຳຕົກຕາດຟານ, ຕາດເຍືອງ, ຕາດຜາສ້ວມ ແລະ ຊິມກາເຟສົດຈາກໄຮ່ ພັກຄ້າງຄືນທີ່ປາກຊ່ອງ.</p>
+                </div>
+                <div class="bg-emerald-900/70 border border-emerald-800 p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500 text-emerald-950 font-bold flex items-center justify-center">ມື້ 3</span>
+                        <h3 class="text-lg font-bold text-amber-300">ວັດພູ - ດອນເດດ</h3>
+                    </div>
+                    <p class="text-emerald-100 text-sm leading-relaxed">ຊົມຜາສາດຫີນວັດພູ ແລ້ວຂ້າມເຮືອໄປພັກຜ່ອນແບບ Slow Life ທີ່ດອນເດດ-ດອນຄອນ ຂີ່ເຮືອຄາຍັກ.</p>
+                </div>
+                <div class="bg-emerald-900/70 border border-emerald-800 p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500 text-emerald-950 font-bold flex items-center justify-center">ມື້ 4</span>
+                        <h3 class="text-lg font-bold text-amber-300">ຄອນພະເພັງ - ກັບບ້ານ</h3>
+                    </div>
+                    <p class="text-emerald-100 text-sm leading-relaxed">ຊົມຕາດຫຼີ່ຜີ ແລະ ນ້ຳຕົກຕາດຄອນພະເພັງ ກ່ອນເດີນທາງກັບປາກເຊເພື່ອຂຶ້ນລົດ ຫຼື ຍົນກັບ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ສ່ວນຄຳແນະນຳການທ່ອງທ່ຽວ (Travel Tips) -->
+    <section id="tips" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-emerald-600 font-semibold tracking-wider uppercase text-sm">ກຽມຄວາມພ້ອມກ່ອນເດີນທາງ</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2 mb-4">ຄຳແນະນຳທີ່ເປັນປະໂຫຍດ</h2>
+            <p class="text-slate-600">ຂໍ້ມູນສຳຄັນທີ່ຈະຊ່ວຍໃຫ້ການທ່ອງທ່ຽວແຂວງຈຳປາສັກຂອງທ່ານສະດວກສະບາຍ ແລະ ມ່ວນຊື່ນຍິ່ງຂຶ້ນ</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- ບັດຄຳແນະນຳ 1 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-sun"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">ຊ່ວງເວລາທີ່ເໝາະສົມ</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    <strong>ເດືອນພະຈິກ - ກຸມພາ:</strong> ອາກາດເຢັນສະບາຍ ທ້ອງຟ້າແຈ່ມໃສ ເໝາະແກ່ການທ່ຽວທຸກບ່ອນ.<br>
+                    <strong>ເດືອນກໍລະກົດ - ຕຸລາ:</strong> ນ້ຳຕົກຕາດຈະມີນ້ຳຫຼາຍ ແລະ ສວຍງາມທີ່ສຸດ.
+                </p>
+            </div>
+
+            <!-- ບັດຄຳແນະນຳ 2 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-car"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">ການເດີນທາງ</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    ສາມາດບິນມາລົງສະໜາມບິນສາກົນປາກເຊ ຫຼື ນັ່ງລົດນອນຈາກວຽງຈັນ. ພາຍໃນແຂວງສາມາດເຊົ່າລົດຈັກ, ລົດໃຫຍ່ ຫຼື ເໝົາລົດຕູ້ນຳທ່ຽວໄດ້ສະດວກ.
+                </p>
+            </div>
+
+            <!-- ບັດຄຳແນະນຳ 3 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">ການແຕ່ງກາຍ</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    ຄວນກຽມເສື້ອກັນໜາວໄປນຳ ຫາກຂຶ້ນພູພຽງບໍລະເວນ. ສຳລັບວັດພູ ຄວນແຕ່ງກາຍສຸພາບ ແລະ ໃສ່ເກີບຜ້າໃບທີ່ຍ່າງສະດວກ.
+                </p>
+            </div>
+
+            <!-- ບັດຄຳແນະນຳ 4 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-mug-hot"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">ອາຫານ ແລະ ຂອງຝາກ</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    ຫ້າມພາດກາເຟບໍລະເວນລະດັບໂລກ, ປີ້ງໄກ່ນາປົ່ງ, ລາບປາແມ່ນ້ຳຂອງ ແລະ ຊື້ເຂົ້າໜົມໝາກພ້າວ ຫຼື ກາເຟຄົ່ວບົດເປັນຂອງຝາກ.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ສ່ວນທ້າຍເວັບໄຊ (Footer) -->
+    <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-lg bg-amber-500 flex items-center justify-center text-emerald-950 font-bold">
+                    <i class="fa-solid fa-gopuram"></i>
+                </div>
+                <span class="font-bold text-lg text-white">ທ່ຽວຈຳປາສັກ (Champasak Travel)</span>
+            </div>
+            
+            <p class="text-sm text-slate-400 text-center">
+                ສົ່ງເສີມການທ່ອງທ່ຽວແຂວງຈຳປາສັກ ສປປ ລາວ • ທ່ຽວລາວທ່ຽວໃຫ້ມ່ວນ ແລະ ຮັກສາສິ່ງແວດລ້ອມ
+            </p>
+            
+            <div class="flex space-x-4">
+                <a href="#home" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-emerald-700 text-white flex items-center justify-center transition-colors" aria-label="ກັບຂຶ້ນເທິງ">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 4. ໜ້າຕ່າງ Modal ສະແດງລາຍລະອຽດສະຖານທີ່ທ່ອງທ່ຽວ -->
+    <div id="place-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- ພື້ນຫຼັງມືດ -->
+        <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm transition-opacity"></div>
+
+        <!-- ກ່ອງເນື້ອຫາ Modal -->
+        <div class="flex min-h-full items-center justify-center p-4 sm:p-6">
+            <div id="modal-panel" class="relative w-full max-w-3xl transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all">
+                <!-- ປຸ່ມປິດ Modal -->
+                <button id="close-modal-btn" class="absolute right-4 top-4 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-md transition-colors" aria-label="ປິດໜ້າຕ່າງ">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+
+                <!-- ຮູບພາບສ່ວນຫົວຂອງ Modal -->
+                <div class="relative h-64 sm:h-80 w-full bg-slate-200">
+                    <img id="modal-img" src="" alt="" class="h-full w-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-6 right-6 text-white">
+                        <span id="modal-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-amber-500 text-emerald-950 mb-2"></span>
+                        <h3 id="modal-title" class="text-2xl sm:text-3xl font-bold leading-tight"></h3>
+                        <p id="modal-location" class="text-sm text-slate-200 mt-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-location-dot text-amber-400"></i>
+                            <span></span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ເນື້ອຫາລາຍລະອຽດ -->
+                <div class="p-6 sm:p-8 space-y-6 max-h-[65vh] overflow-y-auto">
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info text-emerald-600"></i> ຂໍ້ມູນທົ່ວໄປ
+                        </h4>
+                        <p id="modal-desc" class="text-slate-600 leading-relaxed text-sm sm:text-base"></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- ກິດຈະກຳທີ່ໜ້າສົນໃຈ -->
+                        <div class="bg-emerald-50/70 border border-emerald-100 p-4 rounded-2xl">
+                            <h5 class="font-bold text-emerald-900 mb-2.5 flex items-center gap-2">
+                                <i class="fa-solid fa-person-hiking text-emerald-600"></i> ກິດຈະກຳທີ່ໜ້າສົນໃຈ
+                            </h5>
+                            <ul id="modal-activities" class="space-y-1.5 text-sm text-slate-700">
+                                <!-- ລາຍການກິດຈະກຳ -->
+                            </ul>
+                        </div>
+
+                        <!-- ເວລາທີ່ເໝາະສົມ & ຄຳແນະນຳ -->
+                        <div class="space-y-4">
+                            <div class="bg-amber-50/70 border border-amber-100 p-4 rounded-2xl">
+                                <h5 class="font-bold text-amber-900 mb-1.5 flex items-center gap-2">
+                                    <i class="fa-regular fa-clock text-amber-600"></i> ເວລາທີ່ເໝາະສົມ
+                                </h5>
+                                <p id="modal-best-time" class="text-sm text-slate-700"></p>
+                            </div>
+
+                            <div class="bg-blue-50/70 border border-blue-100 p-4 rounded-2xl">
+                                <h5 class="font-bold text-blue-900 mb-1.5 flex items-center gap-2">
+                                    <i class="fa-solid fa-route text-blue-600"></i> ຄຳແນະນຳການເດີນທາງ
+                                </h5>
+                                <p id="modal-travel-tip" class="text-sm text-slate-700"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ສ່ວນທ້າຍ Modal -->
+                <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                    <button id="modal-done-btn" class="px-6 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-xl transition-colors">
+                        ປິດໜ້າຕ່າງ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript ສຳລັບຈັດການຂໍ້ມູນ, ການຄົ້ນຫາ, ການກັ່ນຕອງ ແລະ Modal -->
+    <script>
+        // ຖານຂໍ້ມູນສະຖານທີ່ທ່ອງທ່ຽວຫຼັກໃນແຂວງຈຳປາສັກ
+        const placesData = [
+            {
+                id: 1,
+                name: "ຜາສາດຫີນວັດພູ",
+                category: "culture",
+                categoryLabel: "ວັດທະນະທຳ/ປະຫວັດສາດ",
+                location: "ເມືອງຈຳປາສັກ (ຫ່າງຈາກປາກເຊ 45 ກມ)",
+                shortDesc: "ມໍລະດົກໂລກແຫ່ງທີ 2 ຂອງລາວ ບູຮານສະຖານຂອມບູຮານທີ່ຕັ້ງຢູ່ຕີນພູເກົ້າ ມີປະຫວັດສາດຍາວນານກວ່າ 1,000 ປີ.",
+                fullDesc: "ຜາສາດຫີນວັດພູ ເປັນບູຮານສະຖານທີ່ສຳຄັນທາງປະຫວັດສາດ ແລະ ວັດທະນະທຳ ທີ່ໄດ້ຮັບການຮັບຮອງເປັນມໍລະດົກໂລກຈາກອົງການ UNESCO ໃນປີ 2001. ຕົວຜາສາດສ້າງດ້ວຍຫີນຊາຍ ແລະ ດິນຈີ່ ຕັ້ງຢູ່ເທິງເນີນພູເກົ້າ ເຊິ່ງເບິ່ງລົງມາເຫັນທິວທັດທົ່ງນາ ແລະ ແມ່ນ້ຳຂອງຢ່າງສວຍງາມ.",
+                image: "https://images.unsplash.com/photo-1599708153386-62bf3f035c78?q=80&w=1000&auto=format&fit=crop",
+                fallbackText: "ຜາສາດຫີນວັດພູ",
+                activities: [
+                    "ຍ່າງຊົມສະຖາປັດຕະຍະກຳຫີນແກະສະຫຼັກບູຮານ",
+                    "ຂຶ້ນໄປສັກກາລະພະພຸດທະຮູບຢູ່ຜາສາດຊັ້ນເທິງສຸດ",
+                    "ຊົມວິວມຸມສູງຂອງເມືອງຈຳປາສັກ ແລະ ແມ່ນ້ຳຂອງ",
+                    "ທ່ຽວຊົມຫໍພິພິທະພັນວັດພູ"
+                ],
+                bestTime: "ເດືອນພະຈິກ - ເດືອນມີນາ (ໂດຍສະເພາະຊ່ວງບຸນນະມັດສະການວັດພູ ເດືອນ 3 ເພັງ)",
+                travelTip: "ຈາກຕົວເມືອງປາກເຊ ຂີ່ລົດໄປຕາມທາງເລກທີ 14A ປະມານ 45 ນາທີ. ຄວນໄປຕອນເຊົ້າໆ ເພື່ອຫຼີກລ່ຽງແດດຮ້ອນ."
+            },
+            {
+                id: 2,
+                name: "ນ້ຳຕົກຕາດຄອນພະເພັງ",
+                category: "nature",
+                categoryLabel: "ທຳມະຊາດ/ນ້ຳຕົກຕາດ",
+                location: "ເມືອງໂຂງ (ຫ່າງຈາກປາກເຊ 150 ກມ)",
+                shortDesc: "ນ້ຳຕົກຕາດທີ່ໃຫຍ່ທີ່ສຸດໃນອາຊີຕາເວັນອອກສ່ຽງໃຕ້ ຈົນໄດ້ຮັບສາຍານາມວ່າ 'ໄນແອງກາຣາແຫ່ງອາຊີ'.",
+                fullDesc: "ນ້ຳຕົກຕາດຄອນພະເພັງ ເປັນນ້ຳຕົກຕາດທີ່ເກີດຈາກການໄຫຼບ່າຂອງແມ່ນ້ຳຂອງຜ່ານໂຂດຫີນຂະໜາດໃຫຍ່ ມີຄວາມກວ້າງ ແລະ ກະແສນ້ຳທີ່ໄຫຼແຮງຕະຫຼອດປີ ສ້າງສຽງດັງກຶກກ້ອງ ແລະ ລະອອງນ້ຳທີ່ສວຍງາມອະລັງການ.",
+                image: "https://images.unsplash.com/photo-1546587348-d12660c30c50?q=80&w=1000&auto=format&fit=crop",
+                fallbackText: "ນ້ຳຕົກຕາດຄອນພະເພັງ",
+                activities: [
+                    "ຊົມຄວາມຍິ່ງໃຫຍ່ຂອງກະແສນ້ຳຕົກຢູ່ສາລາຊົມວິວ",
+                    "ຖ່າຍຮູບຄູ່ກັບຕົ້ນມະນີໂຄດສັກສິດ",
+                    "ຊິມອາຫານທ້ອງຖິ່ນ ແລະ ປາແມ່ນ້ຳຂອງສົດໆ",
+                    "ຊື້ສິນຄ້າຫັດຖະກຳຂອງຊາວບ້ານ"
+                ],
+                bestTime: "ສາມາດທ່ຽວໄດ້ຕະຫຼອດປີ (ເດືອນພະຈິກ - ເມສາ ນ້ຳຈະໃສສີຂຽວມໍລະກົດ)",
+                travelTip: "ເດີນທາງຕາມທາງເລກທີ 13 ໃຕ້ ມຸ່ງໜ້າສູ່ຊາຍແດນລາວ-ກຳປູເຈຍ. ຫ້າມລົງຫຼິ້ນນ້ຳເດັດຂາດເພາະກະແສນ້ຳໄຫຼແຮງຫຼາຍ."
+            },
+            {
+                id: 3,
+                name: "ນ້ຳຕົກຕາດຟານ",
+                category: "nature",
+                categoryLabel: "ທຳມະຊາດ/ນ້ຳຕົກຕາດ",
+                location: "ເມືອງປາກຊ່ອງ (ຫຼັກ 38 ພູພຽງບໍລະເວນ)",
+                shortDesc: "ນ້ຳຕົກຕາດຄູ່ແຝດທີ່ສູງທີ່ສຸດໃນແຂວງຈຳປາສັກ ໄຫຼຕົກລົງສູ່ຫຸບເຫວເລິກກວ່າ 120 ແມັດ ທ່າມກາງປ່າດົງດິບ.",
+                fullDesc: "ນ້ຳຕົກຕາດຟານ ຕັ້ງຢູ່ໃນເຂດປ່າສະຫງວນແຫ່ງຊາດດົງຫົວສາວ ເປັນນ້ຳຕົກຕາດທີ່ມີສາຍນ້ຳ 2 ສາຍໄຫຼລົງມາພ້ອມກັນຈາກໜ້າຜາສູງຊັນ 120 ແມັດ ລົງສູ່ເຫວເລິກ ອ້ອມຮອບດ້ວຍທຳມະຊາດສີຂຽວ ແລະ ໝອກຈາງໆ.",
+                image: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=1000&auto=format&fit=crop",
+                fallbackText: "ນ້ຳຕົກຕາດຟານ",
+                activities: [
+                    "ຫຼິ້ນ Zipline ໂຫນສະລິງຂ້າມຫຸບເຫວໜ້ານ້ຳຕົກຕາດ",
+                    "ຈິບກາເຟຮ້ອນໆ ພ້ອມຊົມວິວນ້ຳຕົກຕາດ",
+                    "ຖ່າຍຮູບເຊັກອິນກັບທະເລໝອກຍາມເຊົ້າ",
+                    "ພັກຜ່ອນໃນຣີສອດທ່າມກາງທຳມະຊາດ"
+                ],
+                bestTime: "ເດືອນກໍລະກົດ - ເດືອນກຸມພາ (ລະດູຝົນນ້ຳຈະຫຼາຍ ລະດູໜາວອາກາດເຢັນຈັດ)",
+                travelTip: "ຢູ່ຫ່າງຈາກປາກເຊພຽງ 38 ກິໂລແມັດ ຕາມເສັ້ນທາງໄປເມືອງປາກຊ່ອງ. ຄວນກຽມເສື້ອກັນໜາວໄປນຳ."
+            },
+            {
+                id: 4,
+                name: "ນ້ຳຕົກຕາດເຍືອງ",
+                category: "nature",
+                categoryLabel: "ທຳມະຊາດ/ນ້ຳຕົກຕາດ",
+                location: "ເມືອງປາກຊ່ອງ (ຫຼັກ 40 ໃກ້ກັບຕາດຟານ)",
+                shortDesc: "ນ້ຳຕົກຕາດທີ່ມີຄວາມສວຍງາມອ່ອນຊ້ອຍ ສາຍນ້ຳໄຫຼຕົກກະທົບໂຂດຫີນເກີດເປັນລະອອງນ້ຳຟຸ້ງກະຈາຍທົ່ວບໍລິເວນ.",
+                fullDesc: "ນ້ຳຕົກຕາດເຍືອງ ຕັ້ງຢູ່ບໍ່ໄກຈາກຕາດຟານ ມີຄວາມສູງປະມານ 42 ແມັດ. ຈຸດເດັ່ນແມ່ນສາມາດຍ່າງລົງຂັ້ນໄດໄປສຳຜັດລະອອງນ້ຳຢູ່ຕີນນ້ຳຕົກໄດ້ຢ່າງໃກ້ຊິດ ພ້ອມມີສວນດອກໄມ້ ແລະ ຈຸດຊົມວິວທີ່ຈັດແຕ່ງຢ່າງສວຍງາມ.",
+                image: "https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1000&auto=format&fit=crop",
+                fallbackText: "ນ້ຳຕົກຕາດເຍືອງ",
+                activities: [
+                    "ຍ່າງລົງຂັ້ນໄດໄປຊົມນ້ຳຕົກແບບໃກ້ຊິດ",
+                    "ຖ່າຍຮູບກັບລະອອງນ້ຳ ແລະ ຮຸ້ງກິນນ້ຳ",
+                    "ຢ້ຽມຊົມວິຖີຊີວິດ ແລະ ຜະລິດຕະພັນຊົນເຜົ່າ",
+                    "ຮັບປະທານອາຫານພື້ນບ້ານຢູ່ຮ້ານອາຫານແຄມນ້ຳ"
+                ],
+                bestTime: "ເດືອນສິງຫາ - ເດືອນມັງກອນ",
+                travelTip: "ທາງຍ່າງລົງໄປຕີນນ້ຳຕົກອາດຈະມື່ນຍ້ອນລະອອງນ້ຳ ຄວນໃສ່ເກີບທີ່ຢຶດເກາະພື້ນໄດ້ດີ ແລະ ກຽມເສື້ອກັນຝົນ."
+            },
+            {
+                id: 5,
+                name: "ສີ່ພັນດອນ (ດອນເດດ - ດອນຄອນ)",
+                category: "islands",
+                categoryLabel: "ໝູ່ເກາະ",
+                location: "ເມືອງໂຂງ (ພາກໃຕ້ສຸດຂອງຈຳປາສັກ)",
+                shortDesc: "ດິນແດນແຫ່ງເກາະດອນກາງແມ່ນ້ຳຂອງ ທີ່ມີບັນຍາກາດງຽບສະຫງົບ ເໝາະແກ່ການພັກຜ່ອນແບບ Slow Life.",
+                fullDesc: "ສີ່ພັນດອນ ເປັນບໍລິເວນທີ່ແມ່ນ້ຳຂອງໄຫຼຜ່ານແກ້ງຫີນ ແລະ ແຍກອອກເປັນເກາະດອນນ້ອຍໃຫຍ່ນັບພັນດອນ. ດອນເດດ ແລະ ດອນຄອນ ເປັນຈຸດໝາຍປາຍທາງຍອດນິຍົມຂອງນັກທ່ອງທ່ຽວ ທີ່ມັກຄວາມສະຫງົບ ທຳມະຊາດ ແລະ ວິຖີຊີວິດລຽບງ່າຍ.",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000&auto=format&fit=crop",
+                fallbackText: "ສີ່ພັນດອນ ດອນເດດ-ດອນຄອນ",
+                activities: [
+                    "ປັ່ນລົດຖີບເລາະຊົມທົ່ງນາ ແລະ ຂ້າມຂົວປະຫວັດສາດ",
+                    "ທ່ຽວຊົມນ້ຳຕົກຕາດຫຼີ່ຜີ (ຕາດສົມພະມິດ)",
+                    "ພາຍເຮືອຄາຍັກ ແລະ ລ່ອງເຮືອຊົມຕາເວັນຕົກດິນ",
+                    "ນອນພັກບັງກະໂລແຄມແມ່ນ້ຳຂອງ"
+                ],
+                bestTime: "ເດືອນພະຈິກ - ເດືອນເມສາ (ອາກາດດີ ບໍ່ມີຝົນ ນ້ຳຂອງໃສ)",
+                travelTip: "ຕ້ອງນັ່ງລົດໄປທີ່ທ່າເຮືອບ້ານນາກະສັງ ແລ້ວຂີ່ເຮືອຫາງຍາວຂ້າມໄປດອນເດດ ໃຊ້ເວລາປະມານ 15-20 ນາທີ."
+            },
+            {
+                id: 6,
+                name: "ພູພຽງບໍລະເວນ",
+                category: "nature",
+                categoryLabel: "ທຳມະຊາດ/ນ້ຳຕົກຕາດ",
+                location: "ເມືອງປາກຊ່ອງ",
+                shortDesc: "ດິນແດນແຫ່ງກາເຟລະດັບໂລກ ອາກາດໜາວເຢັນຕະຫຼອດປີ ອຸດົມສົມບູນໄປດ້ວຍປ່າໄມ້ ຜັກສົດ ແລະ ນ້ຳຕົກຕາດ.",
+                fullDesc: "ພູພຽງບໍລະເວນ ຕັ້ງຢູ່ລະດັບຄວາມສູງ 1,000 - 1,350 ແມັດ ຈາກລະດັບນ້ຳທະເລ ເຮັດໃຫ້ມີອາກາດເຢັນສະບາຍຕະຫຼອດປີ. ດິນພູເຂົາໄຟເກົ່າແຫ່ງນີ້ເປັນແຫຼ່ງປູກກາເຟອາຣາບິກ້າ ແລະ ໂຣບັສຕ້າ ທີ່ມີຊື່ສຽງໂດ່ງດັງໄປທົ່ວໂລກ.",
+                image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1000&auto=format&fit=crop",
+                fallbackText: "ພູພຽງບໍລະເວນ",
+                activities: [
+                    "ທ່ຽວຊົມສວນກາເຟ ແລະ ຮຽນຮູ້ຂັ້ນຕອນການຜະລິດກາເຟ",
+                    "ຊິມກາເຟສົດ ແລະ ຊາຂຽວອໍແກນິກ",
+                    "ຕັ້ງແຄ້ມນອນເຕັ້ນສຳຜັດອາກາດໜາວ",
+                    "ທ່ຽວຊົມນ້ຳຕົກຕາດອີກຫຼາຍແຫ່ງ ເຊັ່ນ: ຕາດຜາສ້ວມ, ຕາດຈຳປີ"
+                ],
+                bestTime: "ເດືອນພະຈິກ - ເດືອນກຸມພາ (ອາກາດໜາວເຢັນຫຼາຍ ບາງມື້ຕ່ຳກວ່າ 10 ອົງສາ)",
+                travelTip: "ສາມາດເຊົ່າລົດຈັກຂີ່ທ່ຽວແບບ Bolaven Loop (ວົງຮອບພູພຽງບໍລະເວນ) 2-3 ມື້ ຈະໄດ້ສຳຜັດທຳມະຊາດຢ່າງເຕັມອີ່ມ."
+            }
+        ];
+
+        // ຕົວແປສຳລັບເກັບສະຖານະການກັ່ນຕອງ
+        let currentCategory = 'all';
+        let currentSearch = '';
+
+        // ອ້າງອີງ Elements ໃນ DOM
+        const placesGrid = document.getElementById('places-grid');
+        const noResults = document.getElementById('no-results');
+        const resultsCount = document.getElementById('results-count');
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const resetFiltersBtn = document.getElementById('reset-filters-btn');
+
+        // Modal Elements
+        const modal = document.getElementById('place-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalDoneBtn = document.getElementById('modal-done-btn');
+
+        // ຟັງຊັນສ້າງ HTML ຂອງແຕ່ລະບັດ
+        function renderPlaces() {
+            // ກັ່ນຕອງຂໍ້ມູນຕາມໝວດໝູ່ ແລະ ຄຳຄົ້ນຫາ
+            const filtered = placesData.filter(place => {
+                const matchesCategory = currentCategory === 'all' || place.category === currentCategory;
+                const searchLower = currentSearch.toLowerCase().trim();
+                const matchesSearch = place.name.toLowerCase().includes(searchLower) || 
+                                      place.location.toLowerCase().includes(searchLower) ||
+                                      place.shortDesc.toLowerCase().includes(searchLower);
+                return matchesCategory && matchesSearch;
+            });
+
+            // ອັບເດດຈຳນວນຜົນລັບ
+            resultsCount.textContent = `ສະແດງ ${filtered.length} ຈາກທັງໝົດ ${placesData.length} ສະຖານທີ່`;
+
+            // ກວດສອບວ່າມີຂໍ້ມູນຫຼືບໍ່
+            if (filtered.length === 0) {
+                placesGrid.innerHTML = '';
+                placesGrid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            placesGrid.classList.remove('hidden');
+            noResults.classList.add('hidden');
+
+            // ສ້າງບັດສະຖານທີ່ທ່ອງທ່ຽວ
+            placesGrid.innerHTML = filtered.map(place => {
+                const fallbackUrl = `https://placehold.co/800x500/064e3b/fbbf24?text=${encodeURIComponent(place.fallbackText)}`;
+                return `
+                <article class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-100 overflow-hidden flex flex-col transition-all duration-300 transform hover:-translate-y-1 group">
+                    <!-- ສ່ວນຮູບພາບ -->
+                    <div class="relative h-56 overflow-hidden bg-slate-200">
+                        <img src="${place.image}" 
+                             alt="${place.name}" 
+                             onerror="this.onerror=null; this.src='${fallbackUrl}';"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 left-3">
+                            <span class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-950/80 text-amber-300 backdrop-blur-md shadow-sm">
+                                ${place.categoryLabel}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- ສ່ວນເນື້ອຫາ -->
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center text-xs text-emerald-700 font-medium mb-2 gap-1.5">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>${place.location}</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2.5 group-hover:text-emerald-700 transition-colors">
+                                ${place.name}
+                            </h3>
+                            <p class="text-slate-600 text-sm leading-relaxed line-clamp-3 mb-6">
+                                ${place.shortDesc}
+                            </p>
+                        </div>
+
+                        <!-- ປຸ່ມເບິ່ງລາຍລະອຽດ -->
+                        <button onclick="openModal(${place.id})" 
+                                class="w-full py-3 px-4 bg-emerald-50 hover:bg-emerald-700 text-emerald-800 hover:text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 border border-emerald-200 hover:border-emerald-700">
+                            <span>ເບິ່ງລາຍລະອຽດ</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </button>
+                    </div>
+                </article>
+                `;
+            }).join('');
+        }
+
+        // ຟັງຊັນເປີດ Modal ສະແດງລາຍລະອຽດ
+        function openModal(id) {
+            const place = placesData.find(p => p.id === id);
+            if (!place) return;
+
+            const fallbackUrl = `https://placehold.co/800x500/064e3b/fbbf24?text=${encodeURIComponent(place.fallbackText)}`;
+            const modalImg = document.getElementById('modal-img');
+            
+            modalImg.src = place.image;
+            modalImg.alt = place.name;
+            modalImg.onerror = function() {
+                this.onerror = null;
+                this.src = fallbackUrl;
+            };
+
+            document.getElementById('modal-badge').textContent = place.categoryLabel;
+            document.getElementById('modal-title').textContent = place.name;
+            document.querySelector('#modal-location span').textContent = place.location;
+            document.getElementById('modal-desc').textContent = place.fullDesc;
+            document.getElementById('modal-best-time').textContent = place.bestTime;
+            document.getElementById('modal-travel-tip').textContent = place.travelTip;
+
+            // ສ້າງລາຍການກິດຈະກຳ
+            const activitiesList = document.getElementById('modal-activities');
+            activitiesList.innerHTML = place.activities.map(act => `
+                <li class="flex items-start gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-600 mt-1 text-xs"></i>
+                    <span>${act}</span>
+                </li>
+            `).join('');
+
+            // ສະແດງ Modal ແລະ ປິດການເລື່ອນໜ້າຈໍຫຼັກ
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ຟັງຊັນປິດ Modal
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Event Listeners ສຳລັບປຸ່ມກັ່ນຕອງໝວດໝູ່
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // ລຶບສະຖານະ active ຈາກທຸກປຸ່ມ
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-emerald-700', 'text-white', 'shadow-sm');
+                    b.classList.add('bg-slate-100', 'text-slate-700');
+                });
+                // ເພີ່ມສະຖານະ active ໃຫ້ປຸ່ມທີ່ຖືກກົດ
+                btn.classList.remove('bg-slate-100', 'text-slate-700');
+                btn.classList.add('bg-emerald-700', 'text-white', 'shadow-sm');
+
+                currentCategory = btn.getAttribute('data-category');
+                renderPlaces();
+            });
+        });
+
+        // Event Listener ສຳລັບຊ່ອງຄົ້ນຫາ
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            if (currentSearch.length > 0) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            renderPlaces();
+        });
+
+        // ປຸ່ມລຶບຄຳຄົ້ນຫາ
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            currentSearch = '';
+            clearSearchBtn.classList.add('hidden');
+            renderPlaces();
+        });
+
+        // ປຸ່ມຣີເຊັດການກັ່ນຕອງທັງໝົດ
+        resetFiltersBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            currentSearch = '';
+            currentCategory = 'all';
+            clearSearchBtn.classList.add('hidden');
+            
+            filterBtns.forEach(b => {
+                b.classList.remove('bg-emerald-700', 'text-white', 'shadow-sm');
+                b.classList.add('bg-slate-100', 'text-slate-700');
+                if (b.getAttribute('data-category') === 'all') {
+                    b.classList.remove('bg-slate-100', 'text-slate-700');
+                    b.classList.add('bg-emerald-700', 'text-white', 'shadow-sm');
+                }
+            });
+            renderPlaces();
+        });
+
+        // Event Listeners ສຳລັບປິດ Modal
+        closeModalBtn.addEventListener('click', closeModal);
+        modalDoneBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', closeModal);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        // ຟັງຊັນສະຫຼັບແທັບແຜນການເດີນທາງ (3 ມື້ / 4 ມື້)
+        function switchItinerary(plan) {
+            const tab3 = document.getElementById('tab-3days');
+            const tab4 = document.getElementById('tab-4days');
+            const content3 = document.getElementById('content-3days');
+            const content4 = document.getElementById('content-4days');
+
+            if (plan === '3days') {
+                tab3.className = 'itinerary-tab px-6 py-3 rounded-xl font-bold text-sm sm:text-base transition-all bg-amber-500 text-emerald-950 shadow-lg';
+                tab4.className = 'itinerary-tab px-6 py-3 rounded-xl font-bold text-sm sm:text-base transition-all bg-emerald-900 text-emerald-100 hover:bg-emerald-800';
+                content3.classList.remove('hidden');
+                content3.classList.add('grid');
+                content4.classList.add('hidden');
+                content4.classList.remove('grid');
+            } else {
+                tab4.className = 'itinerary-tab px-6 py-3 rounded-xl font-bold text-sm sm:text-base transition-all bg-amber-500 text-emerald-950 shadow-lg';
+                tab3.className = 'itinerary-tab px-6 py-3 rounded-xl font-bold text-sm sm:text-base transition-all bg-emerald-900 text-emerald-100 hover:bg-emerald-800';
+                content4.classList.remove('hidden');
+                content4.classList.add('grid');
+                content3.classList.add('hidden');
+                content3.classList.remove('grid');
+            }
+        }
+
+        // ຈັດການເມນູມືຖື
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        // ປິດເມນູມືຖືເມື່ອກົດລິ້ງ
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // ເລີ່ມຕົ້ນສະແດງຂໍ້ມູນເມື່ອໂຫຼດໜ້າເວັບ
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPlaces();
+        });
+    </script>
+</body>
+</html>
